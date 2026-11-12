@@ -1,0 +1,7 @@
+# Day 8 Reflection
+
+The most difficult concept for me was concurrency: two requests can both read "seat available" before either one writes. At first I thought checking a seat and then updating it was safe. I only understood the problem when I traced two users through the steps on paper, one line at a time, and saw both reach the update. I overcame it by learning that the check and the write must be one atomic step, such as a conditional UPDATE inside a transaction, backed by a UNIQUE constraint so the database itself refuses a duplicate. Drawing a small timeline for each failure case made the idea stick.
+
+Based on the feedback on my capstone, I would improve how it handles failure and load. The feedback was that my design explained the happy path well but said little about what happens when a payment fails, a server crashes or traffic spikes. I would add timeouts, retries and idempotency keys, and run a simple load test with realistic numbers to check my estimates instead of trusting them. I would also write my non-functional requirements as measurable targets, such as "95% of requests under 300 ms", so they can be verified.
+
+Next, I want to learn how databases behave under load in practice: indexing, reading query plans and replication. After that I will study caching and message queues in more depth, and build a small ticket-hold prototype so I can test double-booking prevention with many real concurrent requests.
